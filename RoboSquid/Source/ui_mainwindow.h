@@ -141,7 +141,7 @@ namespace UI {
             if (MainWindow->objectName().isEmpty())
                 MainWindow->setObjectName(QStringLiteral("MainWindow"));
             MainWindow->resize(1384, 907);
-            MainWindow->setWindowTitle(QApplication::translate("MainWindow", "RoboSquid v1.0", 0));
+            MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Vessel Data", 0));
 
             centralWidget = new QWidget(MainWindow);
             centralWidget->setObjectName(QStringLiteral("centralWidget"));
