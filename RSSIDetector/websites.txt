@@ -1,0 +1,4 @@
+Adapter pin and usage
+https://www.pjrc.com/teensy/td_libs_XBee.html
+Documentation
+http://www.macro.sk/katalog/datasheets/90001020_a.pdf
