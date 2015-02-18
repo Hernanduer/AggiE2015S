@@ -1,10 +1,10 @@
 /* USB to Serial - Teensy becomes a USB to Serial converter
-   http://dorkbotpdx.org/blog/paul/teensy_as_benito_at_57600_baud
-
-   You must select Serial from the "Tools > USB Type" menu
-
-   This example code is in the public domain.
-*/
+ http://dorkbotpdx.org/blog/paul/teensy_as_benito_at_57600_baud
+ 
+ You must select Serial from the "Tools > USB Type" menu
+ 
+ This example code is in the public domain.
+ */
 
 // set this to the hardware serial port you wish to use
 #define HWSERIAL Serial1
@@ -16,70 +16,53 @@ const int led_on = HIGH;
 const int led_off = LOW;
 
 void setup() {
-	pinMode(led_pin, OUTPUT);
-	digitalWrite(led_pin, led_off);
-	digitalWrite(reset_pin, HIGH);
-	pinMode(reset_pin, OUTPUT);
-	Serial.begin(baud);	// USB, communication to PC or Mac
-	HWSERIAL.begin(baud);	// communication to hardware serial
+  pinMode(led_pin, OUTPUT);
+  digitalWrite(led_pin, led_off);
+  digitalWrite(reset_pin, HIGH);
+  pinMode(reset_pin, OUTPUT);
+  Serial.begin(baud);	// USB, communication to PC or Mac
+  HWSERIAL.begin(baud);	// communication to hardware serial
 }
 
-void writeStuff(const char*co, const int s) {
-        digitalWrite(led_pin, led_on);
-        for (int i = 0; i < s; ++i) {
-                HWSERIAL.write(co[i]);
-        }
-        delay(50);
-        digitalWrite(led_pin, led_off);
-        while (!HWSERIAL.available()) {
-                delay(100);
-        }
+void writeStuff(const char*co, const int s, const bool wait = true) {
+  digitalWrite(led_pin, led_on);
+  for (int i = 0; i < s; ++i) {
+    HWSERIAL.write(co[i]);
+  }
+  delay(50);
+  digitalWrite(led_pin, led_off);
+  while (!HWSERIAL.available() && wait) {
+    delay(100);
+  }
 }
 
 void loop() {
-	unsigned char c;
-        int found = 0;
-        delay(2500);
-        writeStuff("+++", 3);
-        while (HWSERIAL.available()) {
-                c = HWSERIAL.read();
-                delay(10);
-        }
-        while (found == 0) {
-                writeStuff("ATDN Mother\r", 12);
-                String out = String();
-                while (HWSERIAL.available()) {
-                        c = HWSERIAL.read();
-                        out += (char)c;
-                        delay(25);
-                }
-                Serial.println(out);
-                if (out[0] == 'O' && out[1] == 'K') {
-                        found = 1;
-                        writeStuff("ATCN\r", 5);
-                        Serial.println("exiting");
-                }
-        }
-        Serial.println("here now");
-        while (1) {
-                Serial.println("even got here");
-                writeStuff("L", 1);
-                delay(25);
-                writeStuff("+++", 3);
-                while (HWSERIAL.available()) {
-                        c = HWSERIAL.read();
-                        Serial.println("waiting forever");
-                        delay(10);
-                }
-                delay(10);
-                writeStuff("ATDB\r", 5);
-                while (HWSERIAL.available()) {
-                        c = HWSERIAL.read();
-                        Serial.write(c);
-                        delay(10);
-                }
-                Serial.write('\n');
-                writeStuff("ATCN\r", 5);
-        }
+  unsigned char c;
+  int found = 0;
+  delay(2500);
+  writeStuff("+++", 3);
+  while (HWSERIAL.available()) {
+    c = HWSERIAL.read();
+    delay(10);
+  }
+  while (found == 0) {
+    writeStuff("ATDN Mother\r", 12);
+    String out = String();
+    while (HWSERIAL.available()) {
+      c = HWSERIAL.read();
+      out += (char)c;
+      delay(25);
+    }
+    Serial.println(out);
+    if (out[0] == 'O' && out[1] == 'K') {
+      found = 1;
+      writeStuff("ATCN\r", 5, false);
+    }
+  }
+  while (1) {
+    writeStuff("L", 1, false);
+    delay(250);
+  }
 }
+
 
