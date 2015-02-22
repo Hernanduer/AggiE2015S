@@ -122,10 +122,11 @@ namespace UI {
     class MainWindow {
     public:
         Plot accel, press, temp, depth, mag, gyro, accelBig, gyroBig, magBig;
-        WidgetParam webViewP, batteryBarP, coordBoxP, voltageBoxP, infoBoxP, exitButtonP, setButtonP;
+        WidgetParam webViewP, batteryBarP, coordBoxP, voltageBoxP, infoBoxP, exitButtonP, setButtonP, hlLblP;
         RelatedLabel coordBoxText, voltageBoxText, batteryBarText;
 
         QWidget *centralWidget, *summaryTab, *accelTab, *gyroTab, *magTab;
+        QLabel *hlLbl;
         QTabWidget *tabControl;
         QWebView *webView;
         QTextEdit *coordBox, *voltageBox, *infoBox;
@@ -141,7 +142,7 @@ namespace UI {
             if (MainWindow->objectName().isEmpty())
                 MainWindow->setObjectName(QStringLiteral("MainWindow"));
             MainWindow->resize(1384, 907);
-            MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Vessel Data", 0));
+            MainWindow->setWindowTitle(QApplication::translate("MainWindow", "RoboSquid v1.0", 0));
 
             centralWidget = new QWidget(MainWindow);
             centralWidget->setObjectName(QStringLiteral("centralWidget"));
@@ -162,9 +163,34 @@ namespace UI {
             press = Plot(summaryTab, "Pressure", 1070, 240, 270, 180);
             depth = Plot(summaryTab, "Depth", 1070, 450, 270, 180);
 
+            //image file is located in the project release folder and must be copied to a build folder to display
+            QString hlPath=QGuiApplication::applicationDirPath()+"/hrg_logor.png";
+            hlLbl = new QLabel(summaryTab);
+            QPixmap huffLogo(hlPath);
+            if (!huffLogo.isNull()) {
+                hlLbl->setPixmap(huffLogo.scaled(huffLogo.width()/2,huffLogo.height()/2,Qt::IgnoreAspectRatio,Qt::FastTransformation));
+            } else
+                hlLbl->setText("No Pixmap Found at \n "+path);
+            hlLbl->setObjectName(QStringLiteral("Huff Logo"));
+            hlLbl->move(accel.x+accel.w+50,accel.y-10);
+            hlLblP={hlLbl->x(),hlLbl->y(), huffLogo.width()/2, huffLogo.height()/2};
+            hlLbl->setGeometry(hlLblP.q());
+
+            QString hlPath=QGuiApplication::applicationDirPath()+"/hrg_logor.png";
+            hlLbl = new QLabel(summaryTab);
+            QPixmap huffLogo(hlPath);
+            if (!huffLogo.isNull()) {
+                hlLbl->setPixmap(huffLogo.scaled(huffLogo.width()/2,huffLogo.height()/2,Qt::IgnoreAspectRatio,Qt::FastTransformation));
+            } else
+                hlLbl->setText("No Pixmap Found at \n "+path);
+            hlLbl->setObjectName(QStringLiteral("Huff Logo"));
+            hlLbl->move(accel.x+accel.w+50,accel.y-10);
+            hlLblP={hlLbl->x(),hlLbl->y(), huffLogo.width()/2, huffLogo.height()/2};
+            hlLbl->setGeometry(hlLblP.q());
+
             webView = new QWebView(summaryTab);
             webView->setObjectName(QStringLiteral("webView"));
-            webViewP = {330, 30, 700, 600};
+            webViewP = {330, 230, 700, 600};
             webView->setGeometry(webViewP.q());
             webView->setUrl(QUrl(QStringLiteral("about:blank")));
 
@@ -197,13 +223,13 @@ namespace UI {
 
             setButton = new QPushButton(summaryTab);
             setButton->setObjectName(QStringLiteral("setButton"));
-            setButtonP = {1280, 750, 75, 23};
+            setButtonP = {1280, 780, 75, 23};
             setButton->setGeometry(setButtonP.q());
             setButton->setText("Set");
 
             exitButton = new QPushButton(summaryTab);
             exitButton->setObjectName(QStringLiteral("exitButton"));
-            exitButtonP = {1280, 780, 75, 23};
+            exitButtonP = {1280, 810, 75, 23};
             exitButton->setGeometry(exitButtonP.q());
             exitButton->setText("Exit");
 
@@ -234,6 +260,9 @@ namespace UI {
             menuBar->setObjectName(QStringLiteral("menuBar"));
             menuBar->setGeometry(QRect(0, 0, 1384, 21));
 
+
+
+
             menuVisual = new QMenu(menuBar);
             menuVisual->setObjectName(QStringLiteral("menuVisual"));
             mainToolBar = new QToolBar(MainWindow);
@@ -262,6 +291,12 @@ namespace UI {
             p.r(ratioW, ratioH, label);
             w->setGeometry(p.q());
         }
+        void inline imgresize(QLabel* l, WidgetParam&p, const bool&label=false)
+        {
+            p.r(ratioW, ratioH, label);
+            l->setGeometry(p.q());
+        }
+
 
         void resize(const double&ratioW, const double&ratioH) {
             this->ratioW = ratioW;
@@ -284,6 +319,7 @@ namespace UI {
             wresize(infoBox, infoBoxP);
             wresize(setButton, setButtonP);
             wresize(exitButton, exitButtonP);
+            imgresize(hlLbl, hlLblP);
 
             //RelatedLabel's are reliant on the transforms of another widget, so make sure they are processed last and,
             //if reliant on another label, in the proper order
