@@ -50,7 +50,8 @@ void Parser::setOutputBox(QTextEdit* textbox) {
 }
 
 void Parser::transaction() {
-    thread->transaction(settings[currentPort]->name,50,"1");
+    if(currentPort !=0)
+        thread->transaction(settings[currentPort]->name,50,"1");
 }
 
 void Parser::findPort() {

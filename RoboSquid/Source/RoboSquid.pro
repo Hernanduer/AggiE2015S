@@ -29,3 +29,5 @@ HEADERS  += mainwindow.h \
     ui_mainwindow.h \
     qcustomplot.h \
     rotation.h
+
+RESOURCES +=

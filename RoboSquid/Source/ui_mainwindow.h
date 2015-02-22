@@ -197,13 +197,13 @@ namespace UI {
 
             setButton = new QPushButton(summaryTab);
             setButton->setObjectName(QStringLiteral("setButton"));
-            setButtonP = {1280, 780, 75, 23};
+            setButtonP = {1280, 750, 75, 23};
             setButton->setGeometry(setButtonP.q());
             setButton->setText("Set");
 
             exitButton = new QPushButton(summaryTab);
             exitButton->setObjectName(QStringLiteral("exitButton"));
-            exitButtonP = {1280, 810, 75, 23};
+            exitButtonP = {1280, 780, 75, 23};
             exitButton->setGeometry(exitButtonP.q());
             exitButton->setText("Exit");
 
