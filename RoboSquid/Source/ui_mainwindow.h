@@ -122,11 +122,11 @@ namespace UI {
     class MainWindow {
     public:
         Plot accel, press, temp, depth, mag, gyro, accelBig, gyroBig, magBig;
-        WidgetParam webViewP, batteryBarP, coordBoxP, voltageBoxP, infoBoxP, exitButtonP, setButtonP, hlLblP;
+        WidgetParam webViewP, batteryBarP, coordBoxP, voltageBoxP, infoBoxP, exitButtonP, setButtonP, hlLblP, aelLblP;
         RelatedLabel coordBoxText, voltageBoxText, batteryBarText;
 
         QWidget *centralWidget, *summaryTab, *accelTab, *gyroTab, *magTab;
-        QLabel *hlLbl;
+        QLabel *hlLbl, *aelLbl;
         QTabWidget *tabControl;
         QWebView *webView;
         QTextEdit *coordBox, *voltageBox, *infoBox;
@@ -170,23 +170,23 @@ namespace UI {
             if (!huffLogo.isNull()) {
                 hlLbl->setPixmap(huffLogo.scaled(huffLogo.width()/2,huffLogo.height()/2,Qt::IgnoreAspectRatio,Qt::FastTransformation));
             } else
-                hlLbl->setText("No Pixmap Found at \n "+path);
+                hlLbl->setText("No Pixmap Found at \n "+hlPath);
             hlLbl->setObjectName(QStringLiteral("Huff Logo"));
             hlLbl->move(accel.x+accel.w+50,accel.y-10);
             hlLblP={hlLbl->x(),hlLbl->y(), huffLogo.width()/2, huffLogo.height()/2};
             hlLbl->setGeometry(hlLblP.q());
 
-            QString hlPath=QGuiApplication::applicationDirPath()+"/hrg_logor.png";
-            hlLbl = new QLabel(summaryTab);
-            QPixmap huffLogo(hlPath);
-            if (!huffLogo.isNull()) {
-                hlLbl->setPixmap(huffLogo.scaled(huffLogo.width()/2,huffLogo.height()/2,Qt::IgnoreAspectRatio,Qt::FastTransformation));
-            } else
-                hlLbl->setText("No Pixmap Found at \n "+path);
-            hlLbl->setObjectName(QStringLiteral("Huff Logo"));
-            hlLbl->move(accel.x+accel.w+50,accel.y-10);
-            hlLblP={hlLbl->x(),hlLbl->y(), huffLogo.width()/2, huffLogo.height()/2};
-            hlLbl->setGeometry(hlLblP.q());
+//            QString AggiEPath=QGuiApplication::applicationDirPath()+"/hrg_logor.png";
+//            aelLbl = new QLabel(summaryTab);
+//            QPixmap aggiELogo(AggiEPath);
+//            if (!huffLogo.isNull()) {
+//                aelLbl->setPixmap(aggiELogo.scaled(aggiELogo.width()/2,aggiELogo.height()/2,Qt::IgnoreAspectRatio,Qt::FastTransformation));
+//            } else
+//                aelLbl->setText("No Pixmap Found at \n "+AggiEPath);
+//            aelLbl->setObjectName(QStringLiteral("Huff Logo"));
+//            aelLbl->move(hlLbl->x()+hlLbl->width()+50,accel.y-10);
+//            aelLblP={aelLbl->x(),aelLbl->y(), aelLbl->width(), aelLbl->height()};
+//            aelLbl->setGeometry(aelLblP.q());
 
             webView = new QWebView(summaryTab);
             webView->setObjectName(QStringLiteral("webView"));
