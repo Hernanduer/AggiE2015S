@@ -122,14 +122,14 @@ namespace UI {
     class MainWindow {
     public:
         Plot accel, press, temp, depth, mag, gyro, accelBig, gyroBig, magBig;
-        WidgetParam webViewP, batteryBarP, coordBoxP, voltageBoxP, infoBoxP, exitButtonP, setButtonP, hlLblP, aelLblP;
-        RelatedLabel coordBoxText, voltageBoxText, batteryBarText;
+        WidgetParam webViewP, batteryBarP, infoBoxP, exitButtonP, setButtonP, hlLblP, locationTextP, unitTextP, signalTextP;
+        RelatedLabel batteryBarText;
 
         QWidget *centralWidget, *summaryTab, *accelTab, *gyroTab, *magTab;
-        QLabel *hlLbl, *aelLbl;
+        QLabel *hlLbl, *locationText, *unitText, *signalText;
         QTabWidget *tabControl;
         QWebView *webView;
-        QTextEdit *coordBox, *voltageBox, *infoBox;
+        QTextEdit *infoBox;
         QProgressBar *batteryBar;
         QPushButton *exitButton, *setButton;
         QMenuBar *menuBar;
@@ -141,8 +141,8 @@ namespace UI {
         void setupUI(QMainWindow *MainWindow) {
             if (MainWindow->objectName().isEmpty())
                 MainWindow->setObjectName(QStringLiteral("MainWindow"));
-            MainWindow->resize(1384, 907);
-            MainWindow->setWindowTitle(QApplication::translate("MainWindow", "RoboSquid v1.0", 0));
+            MainWindow->resize(1200, 870);
+            MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Vessel Data Observer", 0));
 
             centralWidget = new QWidget(MainWindow);
             centralWidget->setObjectName(QStringLiteral("centralWidget"));
@@ -155,83 +155,74 @@ namespace UI {
             summaryTab->setObjectName(QStringLiteral("summaryTab"));
             int finalSelected = tabControl->addTab(summaryTab, "Summary");
 
-            accel = Plot(summaryTab, "Acceleration", 10, 30, 270, 180);
-            gyro = Plot(summaryTab, "Gyroscope", 10, 240, 270, 180);
-            mag = Plot(summaryTab, "Magnetometer", 10, 450, 270, 180);
+            accel = Plot(summaryTab, "Acceleration", 30, 430, 270, 180);
+            gyro = Plot(summaryTab, "Gyroscope", 300, 430, 270, 180);
+            mag = Plot(summaryTab, "Magnetometer", 570, 430, 270, 180);
 
-            temp = Plot(summaryTab, "Temperature", 1070, 30, 270, 180);
-            press = Plot(summaryTab, "Pressure", 1070, 240, 270, 180);
-            depth = Plot(summaryTab, "Depth", 1070, 450, 270, 180);
+            temp = Plot(summaryTab, "Temperature", 30, 620, 270, 180);
+            press = Plot(summaryTab, "Pressure", 300, 620, 270, 180);
+            depth = Plot(summaryTab, "Depth", 570, 620, 270, 180);
 
             //image file is located in the project release folder and must be copied to a build folder to display
             QString hlPath=QGuiApplication::applicationDirPath()+"/hrg_logor.png";
             hlLbl = new QLabel(summaryTab);
             QPixmap huffLogo(hlPath);
-            if (!huffLogo.isNull()) {
-                hlLbl->setPixmap(huffLogo.scaled(huffLogo.width()/2,huffLogo.height()/2,Qt::IgnoreAspectRatio,Qt::FastTransformation));
-            } else
-                hlLbl->setText("No Pixmap Found at \n "+hlPath);
-            hlLbl->setObjectName(QStringLiteral("Huff Logo"));
-            hlLbl->move(accel.x+accel.w+50,accel.y-10);
-            hlLblP={hlLbl->x(),hlLbl->y(), huffLogo.width()/2, huffLogo.height()/2};
+            if (!huffLogo.isNull())
+                hlLbl->setPixmap(huffLogo.scaled(338,225,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+            else
+                hlLbl->setText("No Image Found at \n "+hlPath);
+            hlLbl->setObjectName(QStringLiteral("huffLogo"));
+            hlLblP={850, 10, 338, 225};
             hlLbl->setGeometry(hlLblP.q());
-
-//            QString AggiEPath=QGuiApplication::applicationDirPath()+"/hrg_logor.png";
-//            aelLbl = new QLabel(summaryTab);
-//            QPixmap aggiELogo(AggiEPath);
-//            if (!huffLogo.isNull()) {
-//                aelLbl->setPixmap(aggiELogo.scaled(aggiELogo.width()/2,aggiELogo.height()/2,Qt::IgnoreAspectRatio,Qt::FastTransformation));
-//            } else
-//                aelLbl->setText("No Pixmap Found at \n "+AggiEPath);
-//            aelLbl->setObjectName(QStringLiteral("Huff Logo"));
-//            aelLbl->move(hlLbl->x()+hlLbl->width()+50,accel.y-10);
-//            aelLblP={aelLbl->x(),aelLbl->y(), aelLbl->width(), aelLbl->height()};
-//            aelLbl->setGeometry(aelLblP.q());
 
             webView = new QWebView(summaryTab);
             webView->setObjectName(QStringLiteral("webView"));
-            webViewP = {330, 230, 700, 600};
+            webViewP = {0, 0, 840, 400};
             webView->setGeometry(webViewP.q());
             webView->setUrl(QUrl(QStringLiteral("about:blank")));
 
-            coordBoxText = RelatedLabel(summaryTab, webView, "coordBox", "Approximate Last Position", true);
+            locationText = new QLabel(summaryTab);
+            locationText->setText("Last Position: 00.000N, 00.000W");
+            locationText->setObjectName(QStringLiteral("locationText"));
+            locationTextP = {850, 240, 335, 15};
+            locationText->setGeometry(locationTextP.q());
 
-            coordBox = new QTextEdit(summaryTab);
-            coordBox->setObjectName(QStringLiteral("coordBox"));
-            coordBoxP = {webViewP.x + (webViewP.w / 2) - 255 / 2, coordBoxText.y + coordBoxText.h + 5, 255, 30};
-            coordBox->setGeometry(coordBoxP.q());
+            unitText = new QLabel(summaryTab);
+            unitText->setText("Connected Units: 0");
+            unitText->setObjectName(QStringLiteral("unitText"));
+            unitTextP = {850, 255, 335, 15};
+            unitText->setGeometry(unitTextP.q());
 
-            voltageBox = new QTextEdit(summaryTab);
-            voltageBox->setObjectName(QStringLiteral("voltageBox"));
-            voltageBoxP = {10, 650, 100, 30};
-            voltageBox->setGeometry(voltageBoxP.q());
-
-            voltageBoxText = RelatedLabel(summaryTab, voltageBox, "voltageBox", "Current Voltage", false, false);
+            signalText = new QLabel(summaryTab);
+            signalText->setText("Signal Strength from Base: 0dBm");
+            signalText->setObjectName(QStringLiteral("signalText"));
+            signalTextP = {850, 270, 335, 15};
+            signalText->setGeometry(signalTextP.q());
 
             infoBox = new QTextEdit(summaryTab);
             infoBox->setObjectName(QStringLiteral("infoBox"));
-            infoBoxP = {905, 700, 340, 140};
+            infoBoxP = {850, 500, 335, 300};
             infoBox->setGeometry(infoBoxP.q());
 
             batteryBar = new QProgressBar(summaryTab);
             batteryBar->setObjectName(QStringLiteral("batteryBar"));
-            batteryBarP = {10, 750, 300, 40};
+            batteryBarP = {850, 300, 200, 10};
             batteryBar->setGeometry(batteryBarP.q());
             batteryBar->setValue(16);
 
-            batteryBarText = RelatedLabel(summaryTab, batteryBar, "batteryBar", "Current Battery Charge", false, false);
+            batteryBarText = RelatedLabel(summaryTab, batteryBar, "batteryBar", "Battery", false, false);
 
             setButton = new QPushButton(summaryTab);
             setButton->setObjectName(QStringLiteral("setButton"));
-            setButtonP = {1280, 780, 75, 23};
+            setButtonP = {850, 470, 75, 23};
             setButton->setGeometry(setButtonP.q());
-            setButton->setText("Set");
+            setButton->setText("Set Baseline");
 
             exitButton = new QPushButton(summaryTab);
             exitButton->setObjectName(QStringLiteral("exitButton"));
-            exitButtonP = {1280, 810, 75, 23};
+            exitButtonP = {1110, 470, 75, 23};
             exitButton->setGeometry(exitButtonP.q());
-            exitButton->setText("Exit");
+            exitButton->setText("Exit Program");
 
             //Individual Graph Tabs
             //Acceleration
@@ -239,21 +230,21 @@ namespace UI {
             accelTab->setObjectName(QStringLiteral("accelTab"));
             tabControl->addTab(accelTab, "Acceleration");
 
-            accelBig = Plot(accelTab, "", 10, 10, 1300, 800);
+            accelBig = Plot(accelTab, "", 200, 10, 1000, 800);
 
             //Gyroscope
             gyroTab = new QWidget();
             gyroTab->setObjectName(QStringLiteral("gyroTab"));
             tabControl->addTab(gyroTab, "Gyroscope");
 
-            gyroBig = Plot(gyroTab, "", 10, 10, 1300, 800);
+            gyroBig = Plot(gyroTab, "", 200, 10, 1000, 800);
 
             //Magnetometer
             magTab = new QWidget();
             magTab->setObjectName(QStringLiteral("magTab"));
             tabControl->addTab(magTab, "Magnetometer");
 
-            magBig = Plot(magTab, "", 10, 10, 1300, 800);
+            magBig = Plot(magTab, "", 200, 10, 1000, 800);
 
 
             menuBar = new QMenuBar(MainWindow);
@@ -291,8 +282,7 @@ namespace UI {
             p.r(ratioW, ratioH, label);
             w->setGeometry(p.q());
         }
-        void inline imgresize(QLabel* l, WidgetParam&p, const bool&label=false)
-        {
+        void inline lresize(QLabel* l, WidgetParam&p, const bool&label=false) {
             p.r(ratioW, ratioH, label);
             l->setGeometry(p.q());
         }
@@ -314,17 +304,17 @@ namespace UI {
 
             wresize(webView, webViewP);
             wresize(batteryBar, batteryBarP);
-            wresize(coordBox, coordBoxP);
-            wresize(voltageBox, voltageBoxP);
             wresize(infoBox, infoBoxP);
             wresize(setButton, setButtonP);
             wresize(exitButton, exitButtonP);
-            imgresize(hlLbl, hlLblP);
+
+            lresize(unitText, unitTextP);
+            lresize(signalText, signalTextP);
+            lresize(locationText, locationTextP);
+            lresize(hlLbl, hlLblP);
 
             //RelatedLabel's are reliant on the transforms of another widget, so make sure they are processed last and,
             //if reliant on another label, in the proper order
-            lresize(coordBoxText);
-            lresize(voltageBoxText);
             lresize(batteryBarText);
         }
     };
