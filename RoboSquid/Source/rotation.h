@@ -86,7 +86,7 @@ struct Rotation {
         GetSystemTime(&nowTime);
         double t = std::time(NULL) + ((double)nowTime.wMilliseconds/1000.0);
         double timeDif = t - lastTime;
-        qDebug() << t << "\n";
+        //qDebug() << t << "\n";
         lastTime = t;
 
         const float gyroGain = .06957f;
