@@ -19,7 +19,7 @@ void setup(){
 	Serial.begin(57600);
 	Serial1.begin(9600);        //GPS
 	Serial2.begin(57600);       //IMU
-	Serial3.begin(115200);
+	Serial3.begin(57600);
 
 	pressure.initialize();
 	delay(4000);
@@ -116,18 +116,18 @@ void readIMU() {
 }
 
 void printData() {
-	Serial.print(accel[0]); Serial.print(",");
-	Serial.print(accel[1]); Serial.print(",");
-	Serial.print(accel[2]); Serial.print(",");
-	Serial.print(gyro[0]); Serial.print(",");
-	Serial.print(gyro[1]); Serial.print(",");
-	Serial.print(gyro[2]); Serial.print(",");
-	Serial.print(mag[0]); Serial.print(",");
-	Serial.print(mag[1]); Serial.print(",");
-	Serial.print(mag[2]); Serial.print(",");
-	Serial.print(temp); Serial.print(",");
-	Serial.print(pres); Serial.print(",");
-	Serial.print(alt); Serial.println("");
+	Serial3.print(accel[0]); Serial3.print(",");
+	Serial3.print(accel[1]); Serial3.print(",");
+	Serial3.print(accel[2]); Serial3.print(",");
+	Serial3.print(gyro[0]); Serial3.print(",");
+	Serial3.print(gyro[1]); Serial3.print(",");
+	Serial3.print(gyro[2]); Serial3.print(",");
+	Serial3.print(mag[0]); Serial3.print(",");
+	Serial3.print(mag[1]); Serial3.print(",");
+	Serial3.print(mag[2]); Serial3.print(",");
+	Serial3.print(temp); Serial3.print(",");
+	Serial3.print(pres); Serial3.print(",");
+	Serial3.print(alt); Serial3.println("");
 }
 
 bool validFix(String s) {

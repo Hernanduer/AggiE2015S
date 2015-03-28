@@ -30,6 +30,10 @@
 
 QT_BEGIN_NAMESPACE
 
+template<typename A> A round(A i) {
+    return floor(i+.5);
+}
+
 namespace UI {
     struct WidgetParam {
         double x, y, w, h;
@@ -172,41 +176,41 @@ namespace UI {
             else
                 hlLbl->setText("No Image Found at \n "+hlPath);
             hlLbl->setObjectName(QStringLiteral("huffLogo"));
-            hlLblP={850, 10, 338, 225};
+            hlLblP.x = 850; hlLblP.y = 10; hlLblP.w = 338; hlLblP.h = 225;
             hlLbl->setGeometry(hlLblP.q());
 
             webView = new QWebView(summaryTab);
             webView->setObjectName(QStringLiteral("webView"));
-            webViewP = {0, 0, 840, 400};
+            webViewP.x = 0; webViewP.y = 0; webViewP.w = 840; webViewP.h = 400;
             webView->setGeometry(webViewP.q());
             webView->setUrl(QUrl(QStringLiteral("about:blank")));
 
             locationText = new QLabel(summaryTab);
             locationText->setText("Last Position: 00.000N, 00.000W");
             locationText->setObjectName(QStringLiteral("locationText"));
-            locationTextP = {850, 240, 335, 15};
+            locationTextP.x = 850; locationTextP.y = 240; locationTextP.w = 335; locationTextP.h = 15;
             locationText->setGeometry(locationTextP.q());
 
             unitText = new QLabel(summaryTab);
             unitText->setText("Connected Units: 0");
             unitText->setObjectName(QStringLiteral("unitText"));
-            unitTextP = {850, 255, 335, 15};
+            unitTextP.x = 850; unitTextP.y = 255; unitTextP.w = 335; unitTextP.h = 15;
             unitText->setGeometry(unitTextP.q());
 
             signalText = new QLabel(summaryTab);
             signalText->setText("Signal Strength from Base: 0dBm");
             signalText->setObjectName(QStringLiteral("signalText"));
-            signalTextP = {850, 270, 335, 15};
+            signalTextP.x = 850; signalTextP.y = 270; signalTextP.w = 335; signalTextP.h = 15;
             signalText->setGeometry(signalTextP.q());
 
             infoBox = new QTextEdit(summaryTab);
             infoBox->setObjectName(QStringLiteral("infoBox"));
-            infoBoxP = {850, 500, 335, 300};
+            infoBoxP.x = 850; infoBoxP.y = 500; infoBoxP.w = 335; infoBoxP.h = 300;
             infoBox->setGeometry(infoBoxP.q());
 
             batteryBar = new QProgressBar(summaryTab);
             batteryBar->setObjectName(QStringLiteral("batteryBar"));
-            batteryBarP = {850, 300, 200, 10};
+            batteryBarP.x = 850; batteryBarP.y = 300; batteryBarP.w = 200; batteryBarP.h = 0;
             batteryBar->setGeometry(batteryBarP.q());
             batteryBar->setValue(16);
 
@@ -214,13 +218,13 @@ namespace UI {
 
             setButton = new QPushButton(summaryTab);
             setButton->setObjectName(QStringLiteral("setButton"));
-            setButtonP = {850, 470, 75, 23};
+            setButtonP.x = 850; setButtonP.y = 470; setButtonP.w = 75; setButtonP.h = 23;
             setButton->setGeometry(setButtonP.q());
             setButton->setText("Set Baseline");
 
             exitButton = new QPushButton(summaryTab);
             exitButton->setObjectName(QStringLiteral("exitButton"));
-            exitButtonP = {1110, 470, 75, 23};
+            exitButtonP.x = 1110; exitButtonP.y = 470; exitButtonP.w = 75; exitButtonP.h = 23;
             exitButton->setGeometry(exitButtonP.q());
             exitButton->setText("Exit Program");
 

@@ -51,8 +51,8 @@ void MasterThread::run() {
                 return;
             }
 
-            if (!serial.setBaudRate(QSerialPort::Baud9600)) {
-                emit error(tr("Can't set baud rate 9600 baud to port %1, error code %2")
+            if (!serial.setBaudRate(QSerialPort::Baud57600)) {
+                emit error(tr("Can't set baud rate 57600 baud to port %1, error code %2")
                            .arg(portName).arg(serial.error()));
                 return;
             }
